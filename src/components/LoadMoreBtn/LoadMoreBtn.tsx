@@ -1,6 +1,7 @@
 import React from 'react'
+import {LoadMoreBtnProps} from './LoadMoreBtn.types'
 
-const LoadMoreBtn = ({onClick}) => {
+const LoadMoreBtn: React.FC<LoadMoreBtnProps> = ({onClick}) => {
   return (
     <div>
       <button onClick={onClick}>Load more</button>

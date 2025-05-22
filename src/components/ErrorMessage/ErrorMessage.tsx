@@ -1,6 +1,6 @@
 import React from 'react'
 import s from './ErrorMessage.module.css'
-const ErrorMessage = ({query}) => {
+const ErrorMessage = ({query}: {query:string}) => {
   return (
     <div className={s.errorMessage}>
       <h1>Oops! Nothing found for "<span className={s.query}>{query}</span>"</h1>

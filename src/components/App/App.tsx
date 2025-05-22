@@ -12,12 +12,13 @@ import { useRef } from 'react';
 import Modal from 'react-modal';
 import ImageModal from '../ImageModal/ImageModal';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn'
+import { Result } from './App.types'; 
 
 const App = () => {
   Modal.setAppElement('#root');
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const openModal = (imageUrl) => {
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const openModal = (imageUrl:string) => {
     console.log(imageUrl)
     setSelectedImage(imageUrl);
     setModalIsOpen(true);
@@ -27,11 +28,12 @@ const App = () => {
     setModalIsOpen(false);
     setSelectedImage(null);
   };
-  const [results, setResults] = useState([]);
-  const [query, setQuery] = useState('random');
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const galleryRef = useRef(null);
+  
+  const [results, setResults] = useState<Result[]>([]);
+  const [query, setQuery] = useState<string>('random');
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const galleryRef = useRef<HTMLDivElement  | null>(null);
   const handleLoadMore = () =>{
     setPage(prev => prev + 1);
     setQuery(prev => prev);
@@ -39,8 +41,8 @@ const App = () => {
     galleryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }, 300);
   };
-  const [loading, setLoading] = useState(false);
-  const handleChangeQuery = newQuery => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const handleChangeQuery = (newQuery:string) => {
     setQuery(newQuery);
     setResults([]);
     setPage(1);
@@ -55,7 +57,7 @@ const App = () => {
         setResults(prev => [...prev, ...data.results]);
         setTotalPages(data.total_pages)
       } catch (error) {
-        if (error.name !== 'CanceledError') {
+        if (error instanceof Error && error.name !== 'CanceledError') {
           console.error(error);
         }
       } finally{
@@ -69,16 +71,22 @@ const App = () => {
   }, [query, page]);
 
   const bannedWords = ["russia", "russian", "moscow"];
+
+  const containsBannedWord = (text: string | null | undefined): boolean => {
+    if (!text) return false;
+    const lowerText = text.toLowerCase();
+    return bannedWords.some(word => lowerText.includes(word));
+  };
   const filteredResults = results.filter(item =>
-    !bannedWords.some(word =>
-      item.alt_description?.toLowerCase().includes(word) ||
-      item.description?.toLowerCase().includes(word) ||
-      item.slug?.toLowerCase().includes(word) ||
-      item.location?.toLowerCase().includes(word) ||
-      item.user?.location?.toLowerCase().includes(word) ||
-      item.user?.name?.toLowerCase().includes(word)
-    )
-  );
+  !(
+    containsBannedWord(item.alt_description) ||
+    containsBannedWord(item.description) ||
+    containsBannedWord(item.slug) ||
+    containsBannedWord(item.location) ||
+    containsBannedWord(item.user?.location) ||
+    containsBannedWord(item.user?.name)
+  )
+);
 
   return (
     <>
@@ -87,9 +95,9 @@ const App = () => {
         <SearchBar handleChangeQuery={handleChangeQuery} toast={toast}/>
       </div>
       {!loading && results.length === 0 && <ErrorMessage query={query}/>}
-      <div ref={galleryRef}><ImageGallery  results={filteredResults} onImageClick={openModal}/></div>
+      <div ref={galleryRef}><ImageGallery  results={filteredResults} onImageClick={openModal} children/></div>
       <ImageModal isOpen={modalIsOpen} imageUrl={selectedImage} onClose={closeModal}/>
-      {loading && <div className={c.wrapper}><Loader/></div>}
+      {loading && <div className={c.wrapper}><Loader loading={loading}/></div>}
       {results.length > 0 && page < totalPages &&  <div className={l.wrapper}><LoadMoreBtn onClick={handleLoadMore}/></div>}
     </>
   )

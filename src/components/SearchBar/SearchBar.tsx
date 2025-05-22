@@ -1,9 +1,11 @@
-import { Field, Form, Formik } from 'formik'
+import { Field, Form, Formik, FormikHelpers } from 'formik'
 import React from 'react'
 import s from './SearchBar.module.css'
 
-const SearchBar = ({handleChangeQuery, toast}) => {
-  const handleSubmit = (values, action) => {
+import { SearchBarProps, FormValues } from './SearchBar.types'
+
+const SearchBar: React.FC<SearchBarProps> = ({handleChangeQuery, toast}) => {
+  const handleSubmit = (values: FormValues, action: FormikHelpers<FormValues>) => {
     const {query} = values;
     if(!query.trim()){
       toast.error("Please enter a search query!");
@@ -27,13 +29,13 @@ const SearchBar = ({handleChangeQuery, toast}) => {
               onSubmit={handleSubmit} 
       >
         <Form className={s.fomikInput}>
-         <div className={s.formikInput}>
+          <div className={s.formikInput}>
             <Field
               type="text"
               name = "query"
               placeholder="Search images and photos"
             />
-         </div>
+          </div>
           <button type="submit">Search</button>
           
         </Form>
