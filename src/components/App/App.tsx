@@ -2,16 +2,16 @@ import h from './components/SearchBar/SearchBar.module.css'
 import l from './components/LoadMoreBtn/LoadMoreBtn.module.css'
 import c from './components/Loader/Loader.module.css'
 import { useEffect, useState } from "react"
-import SearchBar from "./components/SearchBar/SearchBar"
-import ImageGallery from "./components/ImageGallery/ImageGallery";
-import { fetchResults } from "./services/api";
-import Loader from './components/Loader/Loader';
+import SearchBar from "../SearchBar/SearchBar"
+import ImageGallery from "../ImageGallery/ImageGallery";
+import { fetchResults } from "../../services/api";
+import Loader from './components/Loader/Loadertsx';
 import toast, { Toaster } from 'react-hot-toast';
-import  ErrorMessage  from "./components/ErrorMessage/ErrorMessage";
+import  ErrorMessage  from "../ErrorMessage/ErrorMessage";
 import { useRef } from 'react';
 import Modal from 'react-modal';
-import ImageModal from './components/ImageModal/ImageModal';
-import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn'
+import ImageModal from '../ImageModal/ImageModal';
+import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn'
 
 const App = () => {
   Modal.setAppElement('#root');
