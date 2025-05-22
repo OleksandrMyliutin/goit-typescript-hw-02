@@ -1,11 +1,11 @@
-import h from './components/SearchBar/SearchBar.module.css'
-import l from './components/LoadMoreBtn/LoadMoreBtn.module.css'
-import c from './components/Loader/Loader.module.css'
+import h from '../SearchBar/SearchBar.module.css'
+import l from '../LoadMoreBtn/LoadMoreBtn.module.css'
+import c from '../Loader/Loader.module.css'
 import { useEffect, useState } from "react"
 import SearchBar from "../SearchBar/SearchBar"
 import ImageGallery from "../ImageGallery/ImageGallery";
 import { fetchResults } from "../../services/api";
-import Loader from './components/Loader/Loadertsx';
+import Loader from '../Loader/Loader'
 import toast, { Toaster } from 'react-hot-toast';
 import  ErrorMessage  from "../ErrorMessage/ErrorMessage";
 import { useRef } from 'react';
